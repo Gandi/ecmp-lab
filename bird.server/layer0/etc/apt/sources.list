@@ -1,0 +1,9 @@
+# mirrors
+deb http://mirrors.gandi.net/debian jessie main contrib non-free
+deb http://mirrors.gandi.net/debian jessie-updates main contrib
+deb http://mirrors.gandi.net/debian jessie-backports main contrib
+deb http://mirrors.gandi.net/debian-security/ jessie/updates main contrib
+
+# internal
+deb http://packages.gandi.net/gandi-new/jessie jessie main experimental
+

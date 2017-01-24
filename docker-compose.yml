@@ -1,36 +1,55 @@
 version: '2.1'
 services:
-    client1:
-        build: bird.client
+    server1:
+        cap_add:
+            - NET_ADMIN
+        build: bird.server
         volumes:
-            - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.server/server1:/etc/bird.d/
         networks:
             ecmp:
                 ipv4_address: 192.168.123.2
-        links:
-            - router
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
-    client2:
-        build: bird.client
+    server2:
+        cap_add:
+            - NET_ADMIN
+        build: bird.server
         volumes:
-            - ~/gandi/devops/ecmp-lab/bird.client/client2:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.server/server2:/etc/bird.d/
         networks:
             ecmp:
                 ipv4_address: 192.168.123.3
-        links:
-            - router
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
-    router:
+    router1:
+        cap_add:
+            - NET_ADMIN
         build: bird.router
         volumes:
             - ~/gandi/devops/ecmp-lab/bird.router/router1:/etc/bird.d/
         networks:
             ecmp:
                 ipv4_address: 192.168.123.4
+            public:
+                ipv4_address: 192.168.122.4
+        stop_signal: SIGKILL
+        stdin_open: true
+        tty: true
+        sysctls:
+            - net.ipv4.ip_forward=1
+    client1:
+        cap_add:
+            - NET_ADMIN
+            - SYS_ADMIN
+        build: bird.client
+        volumes:
+            - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
+        networks:
+            public:
+                ipv4_address: 192.168.122.100
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
@@ -40,10 +59,26 @@ volumes:
     bird.client:
         external: true
 networks:
+volumes:
+    bird.router:
+        external: true
+    bird.client:
+        external: true
+networks:
     ecmp:
         driver: bridge
         enable_ipv6: false
+        internal: false
         ipam:
             driver: default
             config:
                 - subnet: 192.168.123.0/24
+    public:
+        driver: bridge
+        enable_ipv6: false
+        internal: false
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.122.0/24
+                  gateway: 192.168.122.1

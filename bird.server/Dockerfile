@@ -17,7 +17,5 @@ VOLUME ["/var/log", "/var/run", "/etc/bird.d"]
 
 EXPOSE 179/tcp
 
-COPY ./init.sh /
-
 ENTRYPOINT ["/tini", "--"]
-CMD ["/init.sh"]
+CMD ["/usr/sbin/bird", "-c", "/etc/bird.d/bird.conf", "-s", "/var/run/bird.ctl", "-d"]
