@@ -16,7 +16,7 @@ services:
             - ~/gandi/devops/ecmp-lab/bird.client/client2:/etc/bird.d/
         networks:
             ecmp:
-                ipv4_address: 192.168.123.4
+                ipv4_address: 192.168.123.3
         links:
             - router
         stop_signal: SIGKILL
@@ -26,7 +26,7 @@ services:
             - ~/gandi/devops/ecmp-lab/bird.router/router1:/etc/bird.d/
         networks:
             ecmp:
-                ipv4_address: 192.168.123.3
+                ipv4_address: 192.168.123.4
         stop_signal: SIGKILL
 volumes:
     bird.router:
