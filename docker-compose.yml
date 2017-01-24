@@ -10,6 +10,8 @@ services:
         links:
             - router
         stop_signal: SIGKILL
+        stdin_open: true
+        tty: true
     client2:
         build: bird.client
         volumes:
@@ -20,6 +22,8 @@ services:
         links:
             - router
         stop_signal: SIGKILL
+        stdin_open: true
+        tty: true
     router:
         build: bird.router
         volumes:
@@ -28,6 +32,8 @@ services:
             ecmp:
                 ipv4_address: 192.168.123.4
         stop_signal: SIGKILL
+        stdin_open: true
+        tty: true
 volumes:
     bird.router:
         external: true
