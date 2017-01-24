@@ -1,0 +1,7 @@
+// File managed by puppet, do not edit it locally
+// Config APT for Gandi
+// 
+
+APT::Install-Recommends "0";
+APT::Install-Suggests "0";
+APT::Get::AllowUnauthenticated 1;

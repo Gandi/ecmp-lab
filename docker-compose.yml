@@ -1,0 +1,43 @@
+version: '2.1'
+services:
+    client1:
+        build: bird.client
+        volumes:
+            - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
+        networks:
+            ecmp:
+                ipv4_address: 192.168.123.2
+        links:
+            - router
+        stop_signal: SIGKILL
+    client2:
+        build: bird.client
+        volumes:
+            - ~/gandi/devops/ecmp-lab/bird.client/client2:/etc/bird.d/
+        networks:
+            ecmp:
+                ipv4_address: 192.168.123.4
+        links:
+            - router
+        stop_signal: SIGKILL
+    router:
+        build: bird.router
+        volumes:
+            - ~/gandi/devops/ecmp-lab/bird.router/router1:/etc/bird.d/
+        networks:
+            ecmp:
+                ipv4_address: 192.168.123.3
+        stop_signal: SIGKILL
+volumes:
+    bird.router:
+        external: true
+    bird.client:
+        external: true
+networks:
+    ecmp:
+        driver: bridge
+        enable_ipv6: false
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.123.0/24
