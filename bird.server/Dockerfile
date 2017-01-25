@@ -12,10 +12,11 @@ ADD layer0 .
 RUN chmod 644 /etc/apt/sources.list /etc/apt/apt.conf.d/42gandi
 RUN apt-get update && apt-get upgrade -y
 
-RUN apt-get -y update && apt-get install -y bird
+RUN apt-get -y update && apt-get install -y bird \
+    nginx
 VOLUME ["/var/log", "/var/run", "/etc/bird.d"]
 
-EXPOSE 179/tcp
+COPY ./init.sh /
 
 ENTRYPOINT ["/tini", "--"]
-CMD ["/usr/sbin/bird", "-c", "/etc/bird.d/bird.conf", "-s", "/var/run/bird.ctl", "-d"]
+CMD ["/init.sh" ]

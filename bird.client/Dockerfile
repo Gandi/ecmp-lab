@@ -12,10 +12,10 @@ ADD layer0 .
 RUN chmod 644 /etc/apt/sources.list /etc/apt/apt.conf.d/42gandi
 RUN apt-get update && apt-get upgrade -y
 
-RUN apt-get -y update && apt-get install -y bird
+RUN apt-get -y update && apt-get install -y bird \
+    tcpdump \
+    wget
 VOLUME ["/var/log", "/var/run", "/etc/bird.d"]
-
-EXPOSE 179/tcp
 
 COPY ./init.sh /
 

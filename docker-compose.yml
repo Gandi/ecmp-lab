@@ -9,6 +9,8 @@ services:
         networks:
             ecmp:
                 ipv4_address: 192.168.123.2
+                aliases:
+                    - server1
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
@@ -17,10 +19,12 @@ services:
             - NET_ADMIN
         build: bird.server
         volumes:
-            - ~/gandi/devops/ecmp-lab/bird.server/server2:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.server/server1:/etc/bird.d/
         networks:
             ecmp:
                 ipv4_address: 192.168.123.3
+                aliases:
+                    - server2
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
@@ -33,6 +37,8 @@ services:
         networks:
             ecmp:
                 ipv4_address: 192.168.123.4
+                aliases:
+                    - router1
             public:
                 ipv4_address: 192.168.122.4
         stop_signal: SIGKILL
@@ -43,7 +49,6 @@ services:
     client1:
         cap_add:
             - NET_ADMIN
-            - SYS_ADMIN
         build: bird.client
         volumes:
             - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
@@ -53,16 +58,46 @@ services:
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
+    client2:
+        cap_add:
+            - NET_ADMIN
+        build: bird.client
+        volumes:
+            - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
+        networks:
+            public:
+                ipv4_address: 192.168.122.101
+        stop_signal: SIGKILL
+        stdin_open: true
+    client3:
+        cap_add:
+            - NET_ADMIN
+        build: bird.client
+        volumes:
+            - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
+        networks:
+            public:
+                ipv4_address: 192.168.122.102
+        stop_signal: SIGKILL
+        stdin_open: true
+    client4:
+        cap_add:
+            - NET_ADMIN
+        build: bird.client
+        volumes:
+            - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
+        networks:
+            public:
+                ipv4_address: 192.168.122.103
+        stop_signal: SIGKILL
+        stdin_open: true
+
 volumes:
     bird.router:
         external: true
     bird.client:
         external: true
-networks:
-volumes:
-    bird.router:
-        external: true
-    bird.client:
+    bird.server:
         external: true
 networks:
     ecmp:
@@ -81,4 +116,3 @@ networks:
             driver: default
             config:
                 - subnet: 192.168.122.0/24
-                  gateway: 192.168.122.1
