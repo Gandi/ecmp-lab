@@ -1,11 +1,13 @@
 version: '2.1'
 services:
     server1:
+        hostname: server1
         cap_add:
             - NET_ADMIN
         build: bird.server
         volumes:
-            - ~/gandi/devops/ecmp-lab/bird.server/server1:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.server/server:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.server/server6_1:/etc/bird6.d/
         networks:
             ecmp:
                 ipv4_address: 192.168.123.2
@@ -14,12 +16,16 @@ services:
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
+        environment:
+            - IP6=2009:100::2/64
     server2:
+        hostname: server2
         cap_add:
             - NET_ADMIN
         build: bird.server
         volumes:
-            - ~/gandi/devops/ecmp-lab/bird.server/server1:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.server/server:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.server/server6_2:/etc/bird6.d/
         networks:
             ecmp:
                 ipv4_address: 192.168.123.3
@@ -28,12 +34,17 @@ services:
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
+        environment:
+            - IP6=2009:100::3/64
     router1:
+        hostname: router1
         cap_add:
             - NET_ADMIN
+            - SYS_ADMIN
+            - SYS_PTRACE
         build: bird.router
         volumes:
-            - ~/gandi/devops/ecmp-lab/bird.router/router1:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.router/router:/etc/bird.d/
         networks:
             ecmp:
                 ipv4_address: 192.168.123.4
@@ -46,51 +57,71 @@ services:
         tty: true
         sysctls:
             - net.ipv4.ip_forward=1
+            - net.ipv6.conf.all.forwarding=1
+        environment:
+            - IP6_1=2009:100::4/64
+            - IP6_2=2009:101::4/64
     client1:
+        hostname: client1
         cap_add:
             - NET_ADMIN
         build: bird.client
         volumes:
-            - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.client/client:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.client/client1_6:/etc/bird6.d/
         networks:
             public:
                 ipv4_address: 192.168.122.100
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
+        environment:
+            - IP6=2009:101::100/64
     client2:
+        hostname: client2
         cap_add:
             - NET_ADMIN
         build: bird.client
         volumes:
-            - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.client/client:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.client/client2_6:/etc/bird6.d/
         networks:
             public:
                 ipv4_address: 192.168.122.101
         stop_signal: SIGKILL
         stdin_open: true
+        environment:
+            - IP6=2009:101::101/64
     client3:
+        hostname: client3
         cap_add:
             - NET_ADMIN
         build: bird.client
         volumes:
-            - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.client/client:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.client/client3_6:/etc/bird6.d/
         networks:
             public:
                 ipv4_address: 192.168.122.102
         stop_signal: SIGKILL
         stdin_open: true
+        environment:
+            - IP6=2009:101::102/64
     client4:
+        hostname: client4
         cap_add:
             - NET_ADMIN
         build: bird.client
         volumes:
-            - ~/gandi/devops/ecmp-lab/bird.client/client1:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.client/client:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.client/client4_6:/etc/bird6.d/
         networks:
             public:
                 ipv4_address: 192.168.122.103
         stop_signal: SIGKILL
         stdin_open: true
+        environment:
+            - IP6=2009:101::103/64
 
 volumes:
     bird.router:

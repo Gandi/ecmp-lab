@@ -14,7 +14,7 @@ RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get -y update && apt-get install -y bird \
     nginx
-VOLUME ["/var/log", "/var/run", "/etc/bird.d"]
+VOLUME ["/var/log", "/var/run", "/etc/bird.d", "/etc/bird6.d"]
 
 COPY ./init.sh /
 

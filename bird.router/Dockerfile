@@ -1,4 +1,4 @@
-FROM debian:jessie-slim
+FROM debian:stretch-slim
 MAINTAINER Gandi
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -12,7 +12,11 @@ ADD layer0 .
 RUN chmod 644 /etc/apt/sources.list /etc/apt/apt.conf.d/42gandi
 RUN apt-get update && apt-get upgrade -y
 
-RUN apt-get -y update && apt-get install -y bird
+RUN apt-get -y update && apt-get install -y bird \
+    gdb \
+    procps \
+    strace \
+    libcap-ng-utils
 VOLUME ["/var/log", "/var/run", "/etc/bird.d"]
 
 COPY ./init.sh /
