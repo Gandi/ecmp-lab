@@ -11,8 +11,6 @@ services:
         networks:
             ecmp:
                 ipv4_address: 192.168.123.2
-                aliases:
-                    - server1
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
@@ -29,13 +27,43 @@ services:
         networks:
             ecmp:
                 ipv4_address: 192.168.123.3
-                aliases:
-                    - server2
         stop_signal: SIGKILL
         stdin_open: true
         tty: true
         environment:
             - IP6=2009:100::3/64
+    server3:
+        hostname: server3
+        cap_add:
+            - NET_ADMIN
+        build: bird.server
+        volumes:
+            - ~/gandi/devops/ecmp-lab/bird.server/server:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.server/server6_3:/etc/bird6.d/
+        networks:
+            ecmp:
+                ipv4_address: 192.168.123.5
+        stop_signal: SIGKILL
+        stdin_open: true
+        tty: true
+        environment:
+            - IP6=2009:100::5/64
+    server4:
+        hostname: server4
+        cap_add:
+            - NET_ADMIN
+        build: bird.server
+        volumes:
+            - ~/gandi/devops/ecmp-lab/bird.server/server:/etc/bird.d/
+            - ~/gandi/devops/ecmp-lab/bird.server/server6_4:/etc/bird6.d/
+        networks:
+            ecmp:
+                ipv4_address: 192.168.123.6
+        stop_signal: SIGKILL
+        stdin_open: true
+        tty: true
+        environment:
+            - IP6=2009:100::6/64
     router1:
         hostname: router1
         cap_add:
