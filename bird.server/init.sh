@@ -6,6 +6,7 @@ ip addr add 192.168.123.200/32 dev lo
 ip addr add 2009:100::200/128 dev lo
 
 ip -6 addr add $IP6 dev eth0
+ip -6 route add default via 2009:100::4
 
 mkdir -p /run/bird
 mkdir -p /var/log/nginx
